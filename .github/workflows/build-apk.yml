@@ -1,0 +1,34 @@
+name: Build Flutter APK
+
+on:
+  push:
+    branches:
+      - mo2845040-gmail-com/WKSP-1-building-full-stack
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+      
+      - name: Get dependencies
+        run: |
+          cd linguify_app
+          flutter pub get
+      
+      - name: Build APK
+        run: |
+          cd linguify_app
+          flutter build apk --release
+      
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: linguify-release-apk
+          path: linguify_app/build/app/outputs/flutter-app/release/app-release.apk
